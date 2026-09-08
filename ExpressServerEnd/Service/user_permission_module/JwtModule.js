@@ -118,6 +118,11 @@ const jwtAuth = expressJwt
       // 动态点赞明细 / 转发列表：公开可读，对齐 detail 接口策略
       { url: /\/api\/v1\/community\/.*\/likers/ },
       { url: /\/api\/v1\/community\/.*\/forwards/ },
+      // 互动态查询（批量 / detail 单资源）：公开可读（计划书 §5.18，2.60.0）。
+      // be-message-service 侧已改用 OptionalUser，匿名时 viewer_mid=0 → isLike /
+      // isFavorite 恒 false，计数照常返回；浏览 MQ 仍仅登录用户投递。
+      // 正则未锚定，一条同时覆盖 /interaction/status 与 /interaction/status/{bizId}。
+      { url: /\/api\/v1\/community\/interaction\/status/ },
       // 评论读接口（列表 / 详情 / 楼中楼）对未登录用户同样可读：be-message-service
       // 侧 resolve_optional_viewer 已允许匿名，匿名时后端强制最多 10 条并返回
       // viewer_is_anonymous 标记，前端渲染登录引导蒙层（对标 B 站）。
