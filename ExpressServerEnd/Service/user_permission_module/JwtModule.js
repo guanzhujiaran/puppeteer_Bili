@@ -123,13 +123,14 @@ const jwtAuth = expressJwt
       // isFavorite 恒 false，计数照常返回；浏览 MQ 仍仅登录用户投递。
       // 正则未锚定，一条同时覆盖 /interaction/status 与 /interaction/status/{bizId}。
       { url: /\/api\/v1\/community\/interaction\/status/ },
-      // 评论读接口（列表 / 详情 / 楼中楼）对未登录用户同样可读：be-message-service
-      // 侧 resolve_optional_viewer 已允许匿名，匿名时后端强制最多 10 条并返回
-      // viewer_is_anonymous 标记，前端渲染登录引导蒙层（对标 B 站）。
+      // 评论读接口（列表 / 详情 / 楼中楼 / 首页最新评论）对未登录用户同样可读：
+      // be-message-service 侧 resolve_optional_viewer 已允许匿名，匿名时后端强制最多
+      // 10 条并返回 viewer_is_anonymous 标记，前端渲染登录引导蒙层（对标 B 站）。
       // 评论写接口（add / reply / delete / audit 等）不在白名单，仍走 jwtAuth + 上游 RequiredUser。
       { url: /\/api\/v1\/comment\/main/ },
       { url: /\/api\/v1\/comment\/detail\/.*/ },
       { url: /\/api\/v1\/comment\/sub/ },
+      { url: /\/api\/v1\/comment\/latest/ },
       // 收藏公开读接口：访客查看他人主页收藏（无需登录，受主人 showFavorites 控制）
       { url: /\/api\/v1\/favorite\/user\/folders/ },
       { url: /\/api\/v1\/favorite\/user\/dynamics/ },
